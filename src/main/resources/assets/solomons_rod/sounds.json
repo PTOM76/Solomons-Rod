@@ -1,0 +1,39 @@
+{
+    "bam": {
+        "subtitle": "subtitles.solomons_rod.bam",
+        "sounds": [
+            "solomons_rod:bam"
+        ]
+    },
+    "crash": {
+        "subtitle": "subtitles.solomons_rod.crash",
+        "sounds": [
+            "solomons_rod:crash"
+        ]
+    },
+    "create": {
+        "subtitle": "subtitles.solomons_rod.create",
+        "sounds": [
+            "solomons_rod:create"
+        ]
+    },
+    "erase": {
+        "subtitle": "subtitles.solomons_rod.erase",
+        "sounds": [
+            "solomons_rod:erase"
+        ]
+    },
+    "fire": {
+        "subtitle": "subtitles.solomons_rod.fire",
+        "sounds": [
+            "solomons_rod:fire"
+        ]
+    },
+    "nocrash": {
+        "subtitle": "subtitles.solomons_rod.nocrash",
+        "sounds": [
+            "solomons_rod:nocrash"
+        ]
+    }
+
+}

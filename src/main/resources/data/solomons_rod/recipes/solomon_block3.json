@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "X#X",
+    "#X#"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:black_dye"
+    },
+    "#": {
+      "item": "minecraft:bricks"
+    }
+  },
+  "result": {
+    "item": "solomons_rod:solomon_block3",
+    "count": 8
+  }
+}

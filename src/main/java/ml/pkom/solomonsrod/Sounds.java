@@ -14,9 +14,14 @@ public class Sounds {
     public static final Identifier ERASE_SOUND = SolomonsRod.id("erase");
     public static SoundEvent ERASE_SOUND_EVENT = new SoundEvent(ERASE_SOUND);
 
+    public static final Identifier BAM_SOUND = SolomonsRod.id("bam");
+    public static SoundEvent BAM_SOUND_EVENT = new SoundEvent(BAM_SOUND);
+
+
     public static void init(){
         Registry.register(Registry.SOUND_EVENT, CREATE_SOUND, CREATE_SOUND_EVENT);
         Registry.register(Registry.SOUND_EVENT, CRASH_SOUND, CRASH_SOUND_EVENT);
         Registry.register(Registry.SOUND_EVENT, ERASE_SOUND, ERASE_SOUND_EVENT);
+        Registry.register(Registry.SOUND_EVENT, BAM_SOUND, BAM_SOUND_EVENT);
     }
 }

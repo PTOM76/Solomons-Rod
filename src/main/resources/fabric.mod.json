@@ -22,6 +22,12 @@
     ],
     "client": ["ml.pkom.solomonsrod.SolomonsRodClient"]
   },
+  "mixins": [
+    {
+      "config": "solomons_rod.client.mixins.json",
+      "environment": "client"
+    }
+  ],
   "depends": {
     "fabricloader": "*",
     "fabric": "*",

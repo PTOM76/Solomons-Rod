@@ -1,6 +1,7 @@
 package ml.pkom.solomonsrod;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -63,13 +64,24 @@ public class SolomonsWand extends Item {
             }
 
             BlockPos blockPos = new BlockPos(posX, posY, posZ);
-            if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
+            //if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
+            if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock()) && world.getBlockEntity(blockPos) == null) {
                 world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
                 world.playSound(null, user.getBlockPos(), Sounds.CREATE_SOUND_EVENT, SoundCategory.MASTER, 1f, 1f);
                 return TypedActionResult.success(user.getStackInHand(hand));
             }
         }
         return super.use(world, user, hand);
+    }
+
+    public static boolean canPlace(Block block) {
+        //payer.sendMessage(new LiteralText(block.getClass().toString()), false);
+        if (block == null) return true;
+        if (block instanceof AirBlock) return true;
+        if (block instanceof FluidBlock) return true;
+        if (block instanceof FernBlock) return true;
+        if (block instanceof DeadBushBlock) return true;
+        return false;
     }
 
     /*

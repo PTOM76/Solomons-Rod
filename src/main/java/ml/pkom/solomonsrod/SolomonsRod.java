@@ -8,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.loot.LootTables;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -22,8 +21,6 @@ public class SolomonsRod implements ModInitializer {
     @Override
     public void onInitialize() {
         Sounds.init();
-
-
 
         Registry.register(Registry.BLOCK, id("solomon_block"), SolomonsBlock.SOLOMONS_BLOCK);
         Registry.register(Registry.ITEM, id("solomon_block"), new BlockItem(SolomonsBlock.SOLOMONS_BLOCK, new FabricItemSettings().group(ItemGroup.MISC)));

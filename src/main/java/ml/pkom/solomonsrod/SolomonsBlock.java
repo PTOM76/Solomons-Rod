@@ -10,6 +10,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -39,6 +40,11 @@ public class SolomonsBlock extends Block {
     }
 
     @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return VoxelShapes.fullCube();
+    }
+
+    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
@@ -51,6 +57,12 @@ public class SolomonsBlock extends Block {
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (!world.isClient()) {
+            System.out.println("pos: " + pos + "entityPos: " + entity.getBlockPos());
+            if (entity.getBlockPos().equals(pos)) {
+                world.playSound(null, entity.getBlockPos(), Sounds.NOCRASH_SOUND_EVENT, SoundCategory.MASTER, 1f, 1f);
+                world.removeBlock(pos, false);
+                return;
+            }
             if (entity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entity;
                 if (new BlockPos(player.getCameraPosVec(1F)).getY() >= pos.getY()) return;

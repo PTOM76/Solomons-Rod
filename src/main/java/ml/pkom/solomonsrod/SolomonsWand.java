@@ -6,7 +6,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +28,28 @@ public class SolomonsWand extends Item {
             world.playSound(null, user.getBlockPos(), Sounds.ERASE_SOUND_EVENT, SoundCategory.MASTER, 1f, 1f);
         }
     }
+
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        World world = context.getWorld();
+        BlockPos blockPos = new BlockPos(context.getHitPos());
+        if (!context.getWorld().isClient()) {
+            if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) {
+                if (world.getBlockEntity(blockPos) == null) {
+                    world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
+                    world.playSound(null, blockPos, Sounds.CREATE_SOUND_EVENT, SoundCategory.MASTER, 1f, 1f);
+                    return ActionResult.SUCCESS;
+                }
+                world.playSound(null, context.getPlayer().getBlockPos(), Sounds.NOCRASH_SOUND_EVENT, SoundCategory.MASTER, 1f, 1f);
+                return ActionResult.SUCCESS;
+            }
+            return super.useOnBlock(context);
+        }
+        if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) return ActionResult.SUCCESS;
+        return super.useOnBlock(context);
+    }
+
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {

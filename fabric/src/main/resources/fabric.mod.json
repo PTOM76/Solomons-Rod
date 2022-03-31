@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "solomons_rod",
+  "version": "${version}",
+  "name": "Solomons Rod",
+  "description": "This is add Solomons Rod",
+  "authors": [
+    "Pitan",
+    "Sayo"
+  ],
+  "contributors": [],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/solomonsrod-fabric",
+    "sources": "https://github.com/PTOM76/solomonsrod-fabric",
+    "issues": "https://github.com/PTOM76/solomonsrod-fabric/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/solomons_rod/logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ml.pkom.solomonsrod.fabric.SolomonsRodFabric"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16.4",
+    "architectury": ">=1.1.55"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

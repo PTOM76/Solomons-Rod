@@ -1,0 +1,6 @@
+{
+    "variants": {
+      "broken=false": { "model": "solomons_rod:block/solomon_block" },
+      "broken=true": { "model": "solomons_rod:block/broken_solomon_block" }
+    }
+  }

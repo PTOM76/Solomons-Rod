@@ -1,12 +1,10 @@
-# Architectury Example Mod
+# ソロモンの杖(の再現)
+https://www.curseforge.com/minecraft/mc-mods/solomons-rod-fabric
 
-Example Mod for setting up Architectury mods.
+SourceCode: MIT License
 
-**You might want to visit [Architectury Templates](https://github.com/architectury/architectury-templates) instead, for easier set-up and more up-to-date dependencies.**
-___
+Texture etc: http://minecraft125user.nisfan.net/forum/viewtopic.php?f=11&t=42
 
-Architectury API is added by default, there are instructions on how to remove them within the buildscripts, depending on the API is not required to use the Architectury toolchain.
-
-**Documentation:** https://docs.architectury.dev/
-
-**Discord:** https://discord.gg/C2RdJDpRBP
+1.16～1.18まで動作確認できました。
+本家よりは操作方法が少し違うと思いますが、そこらへんはすみません。
+ソロモンの大いなる杖については完成してません。

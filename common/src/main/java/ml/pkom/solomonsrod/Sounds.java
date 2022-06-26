@@ -1,8 +1,7 @@
 package ml.pkom.solomonsrod;
 
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sound.SoundEvent;
 
 public class Sounds {
 
@@ -16,6 +15,6 @@ public class Sounds {
     }
 
     private static RegistrySupplier<SoundEvent> register(String id) {
-        return SolomonsRod.SOUNDS.register(id, () -> new SoundEvent(new ResourceLocation(SolomonsRod.MOD_ID, id)));
+        return SolomonsRod.SOUNDS.register(SolomonsRod.id(id), () -> new SoundEvent(SolomonsRod.id(id)));
     }
 }

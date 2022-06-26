@@ -1,109 +1,126 @@
 package ml.pkom.solomonsrod;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.block.*;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 public class SolomonsWand extends Item {
-    public static SolomonsWand SOLOMONS_WAND = new SolomonsWand(new Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1));
-//    public static SolomonsWand SOLOMONS_WAND = new SolomonsWand(new FabricItemSettings().group(ItemGroup.TOOLS).maxCount(1));
+    public static SolomonsWand SOLOMONS_WAND = new SolomonsWand(new Settings().group(ItemGroup.TOOLS).maxCount(1));
 
-    public SolomonsWand(Properties properties) {
-        super(properties);
+    public SolomonsWand(Settings settings) {
+        super(settings);
     }
 
-    public void deleteBlock(Level world, Player user, BlockPos pos) {
-        if (!world.isClientSide()) {
+    public void deleteBlock(World world, PlayerEntity user, BlockPos pos) {
+        if (!world.isClient()) {
             world.removeBlock(pos, false);
-            world.playSound(null, user.getOnPos(), Sounds.ERASE_SOUND.get(), SoundSource.MASTER, 1f, 1f);
+            world.playSound(null, user.getBlockPos(), Sounds.ERASE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
         }
     }
 
+
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level world = context.getLevel();
-        BlockPos blockPos = new BlockPos(context.getClickedPos());
-        if (!context.getLevel().isClientSide()) {
-            if (canPlace(world, blockPos)) {
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        World world = context.getWorld();
+        BlockPos blockPos = new BlockPos(context.getHitPos());
+        if (!context.getWorld().isClient()) {
+            if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) {
                 if (world.getBlockEntity(blockPos) == null) {
-                    world.setBlock(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getStateDefinition().getOwner().defaultBlockState(), 3);
-                    world.playSound(null, blockPos, Sounds.CREATE_SOUND.get(), SoundSource.MASTER, 1f, 1f);
-                    return InteractionResult.SUCCESS;
+                    world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
+                    world.playSound(null, blockPos, Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+                    return ActionResult.SUCCESS;
                 }
-                world.playSound(null, context.getPlayer().getOnPos(), Sounds.NOCRASH_SOUND.get(), SoundSource.MASTER, 1f, 1f);
-                return InteractionResult.SUCCESS;
+                world.playSound(null, context.getPlayer().getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+                return ActionResult.SUCCESS;
             }
-            return super.useOn(context);
+            return super.useOnBlock(context);
         }
-        if (canPlace(world, blockPos)) return InteractionResult.SUCCESS;
-        return super.useOn(context);
+        if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) return ActionResult.SUCCESS;
+        return super.useOnBlock(context);
     }
 
+
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        if (!world.isClientSide()) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if (!world.isClient()) {
             double posX = user.getX();
             double posY = user.getY();
             double posZ = user.getZ();
             boolean notChange = false;
-            float pitch = user.getRotationVector().x;
-            if (pitch <= -25) {
+            if (user.getPitch(1F) <= -25) {
                 posY += 2;
-                if (pitch <= -60 && pitch >= -90) {
+                if (user.getPitch(1F) <= -60 && user.getPitch(1F) >= -90) {
                     notChange = true;
                 }
             }
 
-            if (pitch <= 25 && pitch >= -25) {
+            if (user.getPitch(1F) <= 25 && user.getPitch(1F) >= -25) {
                 posY += 1;
             }
 
-            if (pitch >= 50) {
+            if (user.getPitch(1F) >= 50) {
                 posY -= 1;
-                if (pitch <= 90 && pitch >= 75) {
+                if (user.getPitch(1F) <= 90 && user.getPitch(1F) >= 75) {
                     notChange = true;
                 }
             }
 
             if (!notChange) {
-                if (user.getDirection() == Direction.EAST)
+                if (user.getHorizontalFacing() == Direction.EAST)
                     posX += 1;
-                if (user.getDirection() == Direction.WEST)
+                if (user.getHorizontalFacing() == Direction.WEST)
                     posX -= 1;
-                if (user.getDirection() == Direction.NORTH)
+                if (user.getHorizontalFacing() == Direction.NORTH)
                     posZ -= 1;
-                if (user.getDirection() == Direction.SOUTH)
+                if (user.getHorizontalFacing() == Direction.SOUTH)
                     posZ += 1;
             }
 
             BlockPos blockPos = new BlockPos(posX, posY, posZ);
             //if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
-            if (canPlace(world, blockPos)) {
-                world.setBlock(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getStateDefinition().getOwner().defaultBlockState(), 3);
-                world.playSound(null, user.getOnPos(), Sounds.CREATE_SOUND.get(), SoundSource.MASTER, 1f, 1f);
-                return InteractionResultHolder.success(user.getItemInHand(hand));
+            if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock()) && world.getBlockEntity(blockPos) == null) {
+                world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
+                world.playSound(null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+                return TypedActionResult.success(user.getStackInHand(hand));
             }
         }
         return super.use(world, user, hand);
     }
 
-    public static boolean canPlace(Level world, BlockPos blockPos) {
-        Block block = world.getBlockState(blockPos).getBlock();
+    public static boolean canPlace(Block block) {
+        //payer.sendMessage(new LiteralText(block.getClass().toString()), false);
         if (block == null) return true;
         if (block instanceof AirBlock) return true;
-        if (block instanceof MagmaBlock) return true;
-        if (block instanceof WaterlilyBlock) return true;
-        if (block instanceof BushBlock) return true;
+        if (block instanceof FluidBlock) return true;
+        if (block instanceof FernBlock) return true;
+        if (block instanceof DeadBushBlock) return true;
         return false;
     }
+
+    /*
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        if (!context.getWorld().isClient()) {
+            World world = context.getWorld();
+            BlockPos blockPos = new BlockPos(context.getHitPos());
+
+            if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
+                world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
+                world.playSound(null, blockPos, Sounds.CREATE_SOUND_EVENT, SoundCategory.MASTER, 1f, 1f);
+                return ActionResult.SUCCESS;
+            }
+        }
+        return super.useOnBlock(context);
+    }]
+     */
 }

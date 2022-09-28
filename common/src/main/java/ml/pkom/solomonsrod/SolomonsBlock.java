@@ -1,23 +1,23 @@
 package ml.pkom.solomonsrod;
 
+import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
+import ml.pkom.mcpitanlibarch.api.event.block.BlockScheduledTickEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class SolomonsBlock extends Block {
+public class SolomonsBlock extends ExtendBlock {
 
     protected static final VoxelShape SHAPE = Block.createCuboidShape(0.1D, 0.1D, 0.1D, 15.5D, 16.0D, 15.5D);
     public static final BooleanProperty BROKEN = BooleanProperty.of("broken");
@@ -51,8 +51,8 @@ public class SolomonsBlock extends Block {
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        world.setBlockState(pos, state.with(COOL_DOWN, false));
+    public void scheduledTick(BlockScheduledTickEvent e) {
+        e.world.setBlockState(e.pos, e.state.with(COOL_DOWN, false));
     }
 
     @Override

@@ -1,20 +1,20 @@
 package ml.pkom.solomonsrod;
 
+import ml.pkom.mcpitanlibarch.api.event.item.ItemUseEvent;
+import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
+import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class SolomonsWand extends Item {
+public class SolomonsWand extends ExtendItem {
     public static SolomonsWand SOLOMONS_WAND = new SolomonsWand(new Settings().group(ItemGroup.TOOLS).maxCount(1));
 
     public SolomonsWand(Settings settings) {
@@ -28,31 +28,31 @@ public class SolomonsWand extends Item {
         }
     }
 
-
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        World world = context.getWorld();
-        BlockPos blockPos = new BlockPos(context.getHitPos());
-        if (!context.getWorld().isClient()) {
+    public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
+        World world = e.world;
+        BlockPos blockPos = new BlockPos(e.hit.getPos());
+        if (!e.world.isClient()) {
             if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) {
                 if (world.getBlockEntity(blockPos) == null) {
                     world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
                     world.playSound(null, blockPos, Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                     return ActionResult.SUCCESS;
                 }
-                world.playSound(null, context.getPlayer().getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+                world.playSound(null, e.player.getPlayerEntity().getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                 return ActionResult.SUCCESS;
             }
-            return super.useOnBlock(context);
+            return super.onRightClickOnBlock(e);
         }
         if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) return ActionResult.SUCCESS;
-        return super.useOnBlock(context);
+        return super.onRightClickOnBlock(e);
     }
 
-
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> onRightClick(ItemUseEvent e) {
+        World world = e.world;
         if (!world.isClient()) {
+            PlayerEntity user = e.user.getPlayerEntity();
             double posX = user.getX();
             double posY = user.getY();
             double posZ = user.getZ();
@@ -91,14 +91,13 @@ public class SolomonsWand extends Item {
             if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock()) && world.getBlockEntity(blockPos) == null) {
                 world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
                 world.playSound(null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
-                return TypedActionResult.success(user.getStackInHand(hand));
+                return TypedActionResult.success(user.getStackInHand(e.hand));
             }
         }
-        return super.use(world, user, hand);
+        return super.onRightClick(e);
     }
 
     public static boolean canPlace(Block block) {
-        //payer.sendMessage(new LiteralText(block.getClass().toString()), false);
         if (block == null) return true;
         if (block instanceof AirBlock) return true;
         if (block instanceof FluidBlock) return true;
@@ -106,21 +105,4 @@ public class SolomonsWand extends Item {
         if (block instanceof DeadBushBlock) return true;
         return false;
     }
-
-    /*
-    @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        if (!context.getWorld().isClient()) {
-            World world = context.getWorld();
-            BlockPos blockPos = new BlockPos(context.getHitPos());
-
-            if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
-                world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
-                world.playSound(null, blockPos, Sounds.CREATE_SOUND_EVENT, SoundCategory.MASTER, 1f, 1f);
-                return ActionResult.SUCCESS;
-            }
-        }
-        return super.useOnBlock(context);
-    }]
-     */
 }

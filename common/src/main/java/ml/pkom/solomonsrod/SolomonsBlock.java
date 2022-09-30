@@ -2,6 +2,7 @@ package ml.pkom.solomonsrod;
 
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockScheduledTickEvent;
+import ml.pkom.mcpitanlibarch.api.util.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
@@ -23,10 +24,9 @@ public class SolomonsBlock extends ExtendBlock {
     public static final BooleanProperty BROKEN = BooleanProperty.of("broken");
     public static final BooleanProperty COOL_DOWN = BooleanProperty.of("cooldown");
 
-    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(Settings
+    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(BlockUtil.dropsNothing(Settings
             .of(Material.METAL)
-            .strength(-1F, 0F)
-            .dropsNothing()
+            .strength(-1F, 0F))
     );
 
     public SolomonsBlock(Settings settings) {

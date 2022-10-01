@@ -38,6 +38,7 @@ public class SolomonsRod {
         registry.registerItem(id("solomon_wand"), () -> SolomonsWand.SOLOMONS_WAND);
         registry.registerItem(id("demons_wand"), () -> DemonsWand.DEMONS_WAND);
 
+        registry.allRegister();
         //System.out.println(SolomonsRodExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 }

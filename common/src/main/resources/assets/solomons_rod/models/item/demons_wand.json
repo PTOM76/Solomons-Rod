@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-      "layer0": "solomons_rod:items/demons_wand"
+      "layer0": "solomons_rod:item/demons_wand"
     }
   }

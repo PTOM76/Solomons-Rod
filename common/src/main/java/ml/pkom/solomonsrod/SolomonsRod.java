@@ -1,6 +1,8 @@
 package ml.pkom.solomonsrod;
 
 import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
+import ml.pkom.mcpitanlibarch.api.item.DefaultItemGroups;
+import ml.pkom.mcpitanlibarch.api.item.ExtendSettings;
 import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
 import ml.pkom.mcpitanlibarch.api.util.BlockUtil;
 import net.minecraft.block.AbstractBlock;
@@ -8,9 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
-
 public class SolomonsRod {
     public static final String MOD_ID = "solomons_rod";
 
@@ -31,9 +31,9 @@ public class SolomonsRod {
         SOLOMONS_BLOCK_2 = registry.registerBlock(id("solomon_block2"), () -> new Block(BlockUtil.requiresTool(AbstractBlock.Settings.of(Material.METAL).strength(3f, 3f))));
         SOLOMONS_BLOCK_3 = registry.registerBlock(id("solomon_block3"), () -> new Block(BlockUtil.requiresTool(AbstractBlock.Settings.of(Material.METAL).strength(3f, 3f))));
 
-        registry.registerItem(id("solomon_block"), () -> new BlockItem(SOLOMONS_BLOCK.get() ,new Item.Settings().group(ItemGroup.MISC)));
-        registry.registerItem(id("solomon_block2"), () -> new BlockItem(SOLOMONS_BLOCK_2.get() ,new Item.Settings().group(ItemGroup.BUILDING_BLOCKS)));
-        registry.registerItem(id("solomon_block3"), () -> new BlockItem(SOLOMONS_BLOCK_3.get() ,new Item.Settings().group(ItemGroup.BUILDING_BLOCKS)));
+        registry.registerItem(id("solomon_block"), () -> new BlockItem(SOLOMONS_BLOCK.get(), new ExtendSettings().addGroup(DefaultItemGroups.MISC, id("solomon_block"))));
+        registry.registerItem(id("solomon_block2"), () -> new BlockItem(SOLOMONS_BLOCK_2.get(), new ExtendSettings().addGroup(DefaultItemGroups.BUILDING_BLOCKS, id("solomon_block2"))));
+        registry.registerItem(id("solomon_block3"), () -> new BlockItem(SOLOMONS_BLOCK_3.get(), new ExtendSettings().addGroup(DefaultItemGroups.BUILDING_BLOCKS, id("solomon_block3"))));
 
         registry.registerItem(id("solomon_wand"), () -> SolomonsWand.SOLOMONS_WAND);
         registry.registerItem(id("demons_wand"), () -> DemonsWand.DEMONS_WAND);

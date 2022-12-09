@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "solomons_rod:blocks/solomon_block3"
+    "all": "solomons_rod:block/solomon_block3"
   }
 }

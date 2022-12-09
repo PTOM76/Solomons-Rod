@@ -15,6 +15,6 @@ public class Sounds {
     }
 
     private static RegistryEvent<SoundEvent> register(String id) {
-        return SolomonsRod.registry.registerSoundEvent(SolomonsRod.id(id), () -> new SoundEvent(SolomonsRod.id(id)));
+        return SolomonsRod.registry.registerSoundEvent(SolomonsRod.id(id));
     }
 }

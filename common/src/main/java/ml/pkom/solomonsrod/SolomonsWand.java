@@ -2,9 +2,9 @@ package ml.pkom.solomonsrod;
 
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseEvent;
 import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
+import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
 import ml.pkom.mcpitanlibarch.api.item.DefaultItemGroups;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
-import ml.pkom.mcpitanlibarch.api.item.ExtendSettings;
 import ml.pkom.mcpitanlibarch.api.util.math.PosUtil;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,9 +17,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class SolomonsWand extends ExtendItem {
-    public static SolomonsWand SOLOMONS_WAND = new SolomonsWand(new ExtendSettings().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.id("solomon_wand")).maxCount(1));
+    public static SolomonsWand SOLOMONS_WAND = new SolomonsWand(new CompatibleItemSettings().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.id("solomon_wand")).maxCount(1));
 
-    public SolomonsWand(Settings settings) {
+    public SolomonsWand(CompatibleItemSettings settings) {
         super(settings);
     }
 

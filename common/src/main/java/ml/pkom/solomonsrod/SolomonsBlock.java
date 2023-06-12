@@ -1,12 +1,13 @@
 package ml.pkom.solomonsrod;
 
+import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
+import ml.pkom.mcpitanlibarch.api.block.CompatibleMaterial;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockScheduledTickEvent;
-import ml.pkom.mcpitanlibarch.api.util.BlockUtil;
+import ml.pkom.mcpitanlibarch.api.util.WorldUtil;
 import ml.pkom.mcpitanlibarch.api.util.math.PosUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,12 +26,13 @@ public class SolomonsBlock extends ExtendBlock {
     public static final BooleanProperty BROKEN = BooleanProperty.of("broken");
     public static final BooleanProperty COOL_DOWN = BooleanProperty.of("cooldown");
 
-    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(BlockUtil.dropsNothing(Settings
-            .of(MAtetrial.METAL)
-            .strength(-1F, 0F))
+    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(CompatibleBlockSettings
+            .of(CompatibleMaterial.METAL)
+            .strength(-1F, 0F)
+            .dropsNothing()
     );
 
-    public SolomonsBlock(Settings settings) {
+    public SolomonsBlock(CompatibleBlockSettings settings) {
         super(settings);
         setDefaultState(getStateManager().getDefaultState().with(BROKEN, false).with(COOL_DOWN, false));
     }
@@ -74,7 +76,8 @@ public class SolomonsBlock extends ExtendBlock {
                     world.removeBlock(pos, false);
                 } else {
                     //world.getBlockTickScheduler().schedule(pos, SOLOMONS_BLOCK, 5);
-                    world.createAndScheduleBlockTick(pos, SOLOMONS_BLOCK, 5);
+                    WorldUtil.scheduleBlockTick(world, pos, SOLOMONS_BLOCK, 5);
+                    //world.createAndScheduleBlockTick(pos, SOLOMONS_BLOCK, 5);
                     world.setBlockState(pos, state.with(BROKEN, true).with(COOL_DOWN, true));
                 }
                 world.playSound(null, pos, Sounds.CRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);

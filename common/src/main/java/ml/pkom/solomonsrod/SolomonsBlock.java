@@ -3,6 +3,7 @@ package ml.pkom.solomonsrod;
 import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
 import ml.pkom.mcpitanlibarch.api.event.block.BlockScheduledTickEvent;
 import ml.pkom.mcpitanlibarch.api.util.BlockUtil;
+import ml.pkom.mcpitanlibarch.api.util.math.PosUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
@@ -25,7 +26,7 @@ public class SolomonsBlock extends ExtendBlock {
     public static final BooleanProperty COOL_DOWN = BooleanProperty.of("cooldown");
 
     public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(BlockUtil.dropsNothing(Settings
-            .of(Material.METAL)
+            .of(MAtetrial.METAL)
             .strength(-1F, 0F))
     );
 
@@ -58,7 +59,7 @@ public class SolomonsBlock extends ExtendBlock {
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (!world.isClient()) {
-            System.out.println("pos: " + pos + "entityPos: " + entity.getBlockPos());
+            //System.out.println("pos: " + pos + "entityPos: " + entity.getBlockPos());
             if (entity.getBlockPos().equals(pos)) {
                 world.playSound(null, entity.getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                 world.removeBlock(pos, false);
@@ -66,7 +67,7 @@ public class SolomonsBlock extends ExtendBlock {
             }
             if (entity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entity;
-                if (new BlockPos(player.getCameraPosVec(1F)).getY() >= pos.getY()) return;
+                if (PosUtil.flooredBlockPos(player.getCameraPosVec(1F)).getY() >= pos.getY()) return;
             }
             if (!state.get(COOL_DOWN).booleanValue()) {
                 if (state.get(BROKEN).booleanValue()) {

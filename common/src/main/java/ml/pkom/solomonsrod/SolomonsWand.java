@@ -5,6 +5,7 @@ import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
 import ml.pkom.mcpitanlibarch.api.item.DefaultItemGroups;
 import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
 import ml.pkom.mcpitanlibarch.api.item.ExtendSettings;
+import ml.pkom.mcpitanlibarch.api.util.math.PosUtil;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,7 @@ public class SolomonsWand extends ExtendItem {
     @Override
     public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         World world = e.world;
-        BlockPos blockPos = new BlockPos(e.hit.getPos());
+        BlockPos blockPos = PosUtil.flooredBlockPos(e.hit.getPos());
         if (!e.world.isClient()) {
             if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) {
                 if (world.getBlockEntity(blockPos) == null) {
@@ -87,7 +88,7 @@ public class SolomonsWand extends ExtendItem {
                     posZ += 1;
             }
 
-            BlockPos blockPos = new BlockPos(posX, posY, posZ);
+            BlockPos blockPos = PosUtil.flooredBlockPos(posX, posY, posZ);
             //if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
             if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock()) && world.getBlockEntity(blockPos) == null) {
                 world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());

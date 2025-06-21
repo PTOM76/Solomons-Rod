@@ -36,13 +36,12 @@ public class SolomonsBlock extends CompatBlock {
     public static final BooleanProperty BROKEN = PropertyUtil.createBooleanProperty("broken");
     public static final BooleanProperty COOL_DOWN = PropertyUtil.createBooleanProperty("cooldown");
 
-    public static BlockSettingsBuilder settingsBuilder = BlockSettingsBuilder
-            .of(SolomonsRod._id("solomon_block"))
-            .material(CompatibleMaterial.METAL)
+    public static CompatibleBlockSettings settings = CompatibleBlockSettings
+            .of(SolomonsRod._id("solomon_block"), CompatibleMaterial.METAL)
             .strength(-1F, 0F)
             .dropsNothing();
 
-    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(settingsBuilder.build());
+    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(settings);
 
     public SolomonsBlock(CompatibleBlockSettings settings) {
         super(settings);

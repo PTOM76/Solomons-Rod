@@ -1,26 +1,31 @@
 package net.pitan76.solomonsrod;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
+import net.pitan76.mcpitanlib.api.block.args.v2.CollisionShapeEvent;
+import net.pitan76.mcpitanlib.api.block.args.v2.OutlineShapeEvent;
+import net.pitan76.mcpitanlib.api.block.v2.BlockSettingsBuilder;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
-import net.pitan76.mcpitanlib.api.block.ExtendBlock;
+import net.pitan76.mcpitanlib.api.block.v2.CompatBlock;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.event.block.*;
+import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
+import net.pitan76.mcpitanlib.api.event.block.BlockBreakStartEvent;
+import net.pitan76.mcpitanlib.api.event.block.BlockScheduledTickEvent;
+import net.pitan76.mcpitanlib.api.event.block.EntityCollisionEvent;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
-import net.pitan76.mcpitanlib.api.util.PropertyUtil;
-import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
 
-public class SolomonsBlock extends ExtendBlock {
+public class SolomonsBlock extends CompatBlock {
 
-    public static final CompatMapCodec<? extends SolomonsBlock> CODEC = CompatMapCodec.createCodecOfExtendBlock(SolomonsBlock::new);
+    public static final CompatMapCodec<? extends SolomonsBlock> CODEC = CompatMapCodec.createCodecOfCompatBlock(SolomonsBlock::new);
 
     @Override
     public CompatMapCodec<? extends SolomonsBlock> getCompatCodec() {
@@ -31,15 +36,17 @@ public class SolomonsBlock extends ExtendBlock {
     public static final BooleanProperty BROKEN = PropertyUtil.createBooleanProperty("broken");
     public static final BooleanProperty COOL_DOWN = PropertyUtil.createBooleanProperty("cooldown");
 
-    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(CompatibleBlockSettings
-            .of(CompatibleMaterial.METAL)
+    public static BlockSettingsBuilder settingsBuilder = BlockSettingsBuilder
+            .of(SolomonsRod._id("solomon_block"))
+            .material(CompatibleMaterial.METAL)
             .strength(-1F, 0F)
-            .dropsNothing()
-    );
+            .dropsNothing();
+
+    public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(settingsBuilder.build());
 
     public SolomonsBlock(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(getNewDefaultState().with(BROKEN, false).with(COOL_DOWN, false));
+        setDefaultState(getDefaultMidohraState().with(BROKEN, false).with(COOL_DOWN, false));
     }
 
     @Override
@@ -61,7 +68,7 @@ public class SolomonsBlock extends ExtendBlock {
 
     @Override
     public void scheduledTick(BlockScheduledTickEvent e) {
-        WorldUtil.setBlockState(e.world, e.pos, e.state.with(COOL_DOWN, false));
+        WorldUtil.setBlockState(e.world, e.pos, BlockStateUtil.with(e.state, COOL_DOWN, false));
     }
 
     @Override
@@ -70,7 +77,7 @@ public class SolomonsBlock extends ExtendBlock {
 
         World world = e.getWorld();
         BlockPos pos = e.getBlockPos();
-        BlockState state = e.getState();
+        BlockState state = BlockState.of(e.getState());
 
         //System.out.println("pos: " + pos + "entityPos: " + entity.getBlockPos());
         if (e.getEntityPos().equals(pos)) {
@@ -81,7 +88,9 @@ public class SolomonsBlock extends ExtendBlock {
 
         if (e.getEntity() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) e.getEntity();
-            if (PosUtil.flooredBlockPos(player.getCameraPosVec(1F)).getY() >= pos.getY()) return;
+            BlockPos cameraPos = PosUtil.flooredBlockPos(player.getCameraPosVec(1F));
+
+            if (PosUtil.y(cameraPos) >= PosUtil.y(pos)) return;
         }
 
         if (!state.get(COOL_DOWN)) {
@@ -108,8 +117,9 @@ public class SolomonsBlock extends ExtendBlock {
             return;
         }
 
-        if (player.getMainHandStack().getItem() instanceof SolomonsWand || player.getMainHandStack().getItem() instanceof DemonsWand) {
-            SolomonsWand wand = (SolomonsWand) player.getMainHandStack().getItem();
+        Item mainHandItem = ItemStackUtil.getItem(player.getMainHandStack());
+        if (mainHandItem instanceof SolomonsWand || mainHandItem instanceof DemonsWand) {
+            SolomonsWand wand = (SolomonsWand) mainHandItem;
             wand.deleteBlock(e.getWorld(), player, e.getPos());
         }
 

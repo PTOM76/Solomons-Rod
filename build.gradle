@@ -42,6 +42,7 @@ subprojects {
                 project {
                     id = '519836'
                     changelog = rootProject.changelog + "\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]
+                    releaseType = 'release'
 
                     if (modLoader == "fabric")
                         addGameVersion "Fabric"

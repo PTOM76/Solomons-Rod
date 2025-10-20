@@ -155,7 +155,7 @@ public class SolomonsWand extends CompatItem {
         if (block == null) return true;
         if (block instanceof AirBlock) return true;
         if (block instanceof FluidBlock) return true;
-        if (block instanceof FernBlock) return true;
+        if (block instanceof ShortPlantBlock) return true;
         if (block instanceof DeadBushBlock) return true;
         return false;
     }

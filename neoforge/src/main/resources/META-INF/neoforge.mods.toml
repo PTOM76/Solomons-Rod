@@ -1,0 +1,34 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+issueTrackerURL = "https://github.com/PTOM76/solomonsrod-fabric/issues"
+license = "MIT"
+
+[[mods]]
+modId = "solomons_rod"
+version = "${version}"
+displayName = "Solomons Rod"
+authors = "Pitan, Sayo"
+description = '''
+This is add Solomons Rod
+'''
+
+[[dependencies.solomons_rod]]
+modId = "neoforge"
+type = "required"
+versionRange = "[20,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.solomons_rod]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.20,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.solomons_rod]]
+modId = "mcpitanlib"
+type = "required"
+versionRange = "[3.4.0,)"
+ordering = "BEFORE"
+side = "BOTH"

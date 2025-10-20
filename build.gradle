@@ -20,6 +20,7 @@ subprojects {
 
     repositories {
         maven { url "https://maven.pitan76.net/" }
+        maven { url "https://maven.neoforged.net/releases" }
     }
 
     dependencies {
@@ -27,7 +28,7 @@ subprojects {
         // The following line declares the mojmap mappings, you may use other mappings as well
         //mappings loom.officialMojangMappings()
         // The following line declares the yarn mappings you may select this one as well.
-        mappings "net.fabricmc:yarn:1.20.1+build.10:v2"
+        mappings "net.fabricmc:yarn:1.20.4+build.3:v2"
 
         modApi "net.pitan76:mcpitanlib-common${rootProject.mcpitanlib_version}"
     }
@@ -70,6 +71,8 @@ subprojects {
                         addGameVersion '1.21.6'
                         addGameVersion '1.21.7'
                         addGameVersion '1.21.8'
+                        addGameVersion '1.21.9'
+                        addGameVersion '1.21.10'
                     }
 
                     relations {
@@ -110,6 +113,8 @@ subprojects {
                         gameVersions.add('1.21.6')
                         gameVersions.add('1.21.7')
                         gameVersions.add('1.21.8')
+                        gameVersions.add('1.21.9')
+                        gameVersions.add('1.21.10')
                     }
                     required.project "uNRoUnGT" // mcpitanlib
                 }
@@ -135,11 +140,17 @@ allprojects {
         // for more information about repositories.
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
-        options.release = 8
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        if (project.name == "neoforge") {
+            options.release = 17
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        } else {
+            options.release = 8
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
     }
 
     java {

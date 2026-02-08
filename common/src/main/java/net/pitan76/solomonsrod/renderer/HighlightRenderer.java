@@ -1,6 +1,5 @@
 package net.pitan76.solomonsrod.renderer;
 
-import net.minecraft.client.render.Camera;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContext;
@@ -8,6 +7,9 @@ import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContextListen
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
+import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.midohra.client.render.CameraWrapper;
+import net.pitan76.mcpitanlib.midohra.util.math.Vector3d;
 import net.pitan76.solomonsrod.SolomonsWand;
 
 import java.util.Optional;
@@ -25,19 +27,17 @@ public class HighlightRenderer implements WorldRenderContextListener {
 
         if (!(stack.getItem() instanceof SolomonsWand)) return;
 
-        Camera camera = e.getCamera();
-
+        CameraWrapper camera = e.getCameraWrapper();
         BlockPos blockPos = SolomonsWand.getPlacingPos(player);
 
-        double x = blockPos.getX() - camera.getPos().x;
-        double y = blockPos.getY() - camera.getPos().y;
-        double z = blockPos.getZ() - camera.getPos().z;
+        Vector3d camPos = camera.getCameraPos();
+        double x = PosUtil.x(blockPos) - camPos.x;
+        double y = PosUtil.y(blockPos) - camPos.y;
+        double z = PosUtil.z(blockPos) - camPos.z;
 
         e.push();
         e.translate(x, y, z);
-
         e.drawBox(VoxelShapeUtil.getBoundingBox(VoxelShapeUtil.fullCube()), 1f, 1f, 1f, 1f);
-
         e.pop();
     }
 }

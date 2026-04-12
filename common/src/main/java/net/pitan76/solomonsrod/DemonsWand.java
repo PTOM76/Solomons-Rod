@@ -1,22 +1,22 @@
 package net.pitan76.solomonsrod;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.entity.mob.WaterCreatureEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.util.Hand;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.result.EventResult;
 import net.pitan76.mcpitanlib.api.event.v1.LivingHurtEventRegistry;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
-import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.entity.mob.WaterCreatureEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.midohra.entity.EntityWrapper;
 import net.pitan76.mcpitanlib.midohra.item.ItemGroups;
+import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 
 import static net.pitan76.solomonsrod.SolomonsRod._id;
 
@@ -29,17 +29,17 @@ public class DemonsWand extends SolomonsWand {
         LivingHurtEventRegistry.register((e) -> {
             if (!e.isPlayerAttacker()) return EventResult.pass();
 
-            Entity entity = e.getEntity();
+            EntityWrapper entity = EntityWrapper.of(e.getEntity());
             Player player = e.getPlayerAttacker();
-            ItemStack stack = player.getMainHandStack();
+            ItemStack stack = ItemStack.of(player.getMainHandStack());
 
-            if (stack == null || !(stack.getItem() instanceof DemonsWand)) return EventResult.pass();
-            if (!Config.infiniteDurability && ItemStackUtil.isBreak(stack))
+            if (stack.isEmpty() || !(stack.instanceOf(DemonsWand.class))) return EventResult.pass();
+            if (!Config.infiniteDurability && ItemStackUtil.isBreak(stack.toMinecraft()))
                 return EventResult.pass();
 
-            if (entity instanceof AnimalEntity || entity instanceof SlimeEntity || entity instanceof VillagerEntity || entity instanceof WaterCreatureEntity) {
-                WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), Sounds.BAM_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
-                EntityUtil.kill(entity);
+            if (entity.instanceOf(AnimalEntity.class) || entity.instanceOf(SlimeEntity.class) || entity.instanceOf(VillagerEntity.class) || entity.instanceOf(WaterCreatureEntity.class)) {
+                player.getMidohraWorld().playSound(null, player.getBlockPosM(), Sounds.BAM_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
+                entity.kill();
 
                 SolomonsWand.damageStackIfDamageable(stack, player, Hand.MAIN_HAND);
 

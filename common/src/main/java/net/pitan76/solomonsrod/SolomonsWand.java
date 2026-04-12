@@ -13,7 +13,9 @@ import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
 import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.*;
+import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.block.BlockWrapper;
+import net.pitan76.mcpitanlib.midohra.block.MCBlocks;
 import net.pitan76.mcpitanlib.midohra.item.ItemGroups;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
@@ -46,23 +48,24 @@ public class SolomonsWand extends CompatItem {
     @Override
     public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         World world = e.getMidohraWorld();
-        BlockPos blockPos = e.getMidohraPos();
+        BlockPos pos = e.getMidohraPos();
+        BlockState state = e.getMidohraState();
 
         // 耐久値が0の場合はそのまま終了
         if (!Config.infiniteDurability && ItemStackUtil.isBreak(e.stack))
             return super.onRightClickOnBlock(e);
 
         if (e.isClient()) {
-            if (WorldUtil.canSetBlock(world.toMinecraft(), blockPos.toMinecraft()) &&
-                    canPlace(world.getBlockState(blockPos).getBlock()))
+            if (WorldUtil.canSetBlock(world.toMinecraft(), pos.toMinecraft()) &&
+                    canPlace(state.getBlock()))
                 return e.success();
 
             return super.onRightClickOnBlock(e);
         }
 
         // ブロックを設置できない場合はそのまま終了
-        if (!WorldUtil.canSetBlock(world.toMinecraft(), blockPos.toMinecraft()) ||
-                !canPlace(world.getBlockState(blockPos).getBlock()))
+        if (!WorldUtil.canSetBlock(world.toMinecraft(), pos.toMinecraft()) ||
+                !canPlace(state.getBlock()))
             return super.onRightClickOnBlock(e);
 
         // ブロックエンティティが存在する場合はそのまま音を鳴らして終了
@@ -71,8 +74,8 @@ public class SolomonsWand extends CompatItem {
             return e.success();
         }
 
-        world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultMidohraState());
-        world.playSound(null, blockPos, Sounds.CREATE_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
+        world.setBlockState(pos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultMidohraState());
+        world.playSound(null, pos, Sounds.CREATE_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
 
         damageStackIfDamageable(e.player.getMidohraStackInHand(e.hand), e.player, e.hand);
 
@@ -93,7 +96,7 @@ public class SolomonsWand extends CompatItem {
         BlockPos blockPos = getPlacingPos(user);
 
         if (WorldUtil.canSetBlock(world.toMinecraft(), blockPos.toMinecraft()) &&
-                canPlace(world.getBlockState(blockPos).getBlock()) && world.getBlockEntity(blockPos) == null) {
+                canPlace(world.getBlockState(blockPos).getBlock()) && world.getBlockEntity(blockPos).isEmpty()) {
             world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultMidohraState());
             world.playSound(null, user.getBlockPosM(), Sounds.CREATE_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
 

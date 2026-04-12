@@ -66,7 +66,7 @@ public class SolomonsWand extends CompatItem {
             return super.onRightClickOnBlock(e);
 
         // ブロックエンティティが存在する場合はそのまま音を鳴らして終了
-        if (world.getBlockEntity(blockPos) != null) {
+        if (e.hasBlockEntity()) {
             world.playSound(null, e.player.getBlockPosM(), Sounds.NOCRASH_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
             return e.success();
         }
@@ -154,6 +154,7 @@ public class SolomonsWand extends CompatItem {
 
     public static boolean canPlace(BlockWrapper block) {
         if (block == null) return true;
+        if (block.isEmpty()) return true;
         if (block.instanceOf(AirBlock.class)) return true;
         if (block.instanceOf(FluidBlock.class)) return true;
         if (block.instanceOf(ShortPlantBlock.class)) return true;

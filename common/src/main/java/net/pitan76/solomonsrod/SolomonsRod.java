@@ -35,8 +35,8 @@ public class SolomonsRod extends CommonModInitializer {
         registry.registerBlockItem(_id("solomon_block2"), SOLOMONS_BLOCK_2, ItemSettingsBuilder.of().addGroup(ItemGroups.BUILDING_BLOCKS));
         registry.registerBlockItem(_id("solomon_block3"), SOLOMONS_BLOCK_3, ItemSettingsBuilder.of().addGroup(ItemGroups.BUILDING_BLOCKS));
 
-        registry.registerItem(_id("solomon_wand"), () -> SolomonsWand.SOLOMONS_WAND);
-        registry.registerItem(_id("demons_wand"), () -> DemonsWand.DEMONS_WAND);
+        registry.registerRawItem(_id("solomon_wand"), () -> SolomonsWand.SOLOMONS_WAND);
+        registry.registerRawItem(_id("demons_wand"), () -> DemonsWand.DEMONS_WAND);
     }
     
     public static CompatIdentifier _id(String path) {

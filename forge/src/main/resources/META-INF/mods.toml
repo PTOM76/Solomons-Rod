@@ -7,6 +7,8 @@ license = "MIT"
 modId = "solomons_rod"
 version = "${version}"
 displayName = "Solomons Rod"
+displayURL = "https://modrinth.com/mod/solomons-rod-fabric"
+logoFile = "icon.png"
 authors = "Pitan, Sayo"
 description = '''
 This is add Solomons Rod

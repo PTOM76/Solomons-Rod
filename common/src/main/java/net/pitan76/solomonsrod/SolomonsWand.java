@@ -15,7 +15,6 @@ import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.midohra.block.BlockState;
 import net.pitan76.mcpitanlib.midohra.block.BlockWrapper;
-import net.pitan76.mcpitanlib.midohra.block.MCBlocks;
 import net.pitan76.mcpitanlib.midohra.item.ItemGroups;
 import net.pitan76.mcpitanlib.midohra.item.ItemStack;
 import net.pitan76.mcpitanlib.midohra.util.math.BlockPos;
@@ -92,7 +91,7 @@ public class SolomonsWand extends CompatItem {
         if (e.isClient()) super.onRightClick(e);
 
         World world = e.getMidohraWorld();
-        Player user = e.user;
+        Player user = e.getUser();
         BlockPos blockPos = getPlacingPos(user);
 
         if (WorldUtil.canSetBlock(world.toMinecraft(), blockPos.toMinecraft()) &&
@@ -120,21 +119,23 @@ public class SolomonsWand extends CompatItem {
         double posY = pos.y;
         double posZ = pos.z;
 
+        float pitch = user.getPitch();
+
         boolean notChange = false;
-        if (user.getPitch() <= -25) {
+        if (pitch <= -25) {
             posY += 2;
-            if (user.getPitch() <= -60 && user.getPitch() >= -90) {
+            if (pitch <= -60 && pitch >= -90) {
                 notChange = true;
             }
         }
 
-        if (user.getPitch() <= 25 && user.getPitch() >= -25) {
+        if (pitch <= 25 && pitch >= -25) {
             posY += 1;
         }
 
-        if (user.getPitch() >= 50) {
+        if (pitch >= 50) {
             posY -= 1;
-            if (user.getPitch() <= 90 && user.getPitch() >= 75) {
+            if (pitch <= 90 && pitch >= 75) {
                 notChange = true;
             }
         }
